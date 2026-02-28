@@ -1,0 +1,240 @@
+{
+  "schema_version": "0.1",
+  "case_id": "omental_extrarenal_rhabdoid_tumor_adolescent_case",
+  "source_note": "Structured from user-provided human clinical case report. HPO IDs are best-effort approximations and should be verified against official HPO database before production use.",
+  "patient": {
+    "age_years": 16,
+    "sex": "female",
+    "duration_days_abdominal_pain": 10
+  },
+  "phenotypes": [
+    {
+      "hpo_id": "HP:0002027",
+      "label": "Abdominal pain",
+      "status": "present",
+      "details": "Left lower abdominal pain >10 days, worsened pre-admission"
+    },
+    {
+      "hpo_id": "HP:0002013",
+      "label": "Vomiting",
+      "status": "present",
+      "details": "Malignant vomiting pre-admission"
+    },
+    {
+      "hpo_id": "HP:0001873",
+      "label": "Palpitations",
+      "status": "present"
+    },
+    {
+      "hpo_id": "HP:0003270",
+      "label": "Abdominal mass",
+      "status": "present",
+      "details": "Large palpable pelvic/abdominal mass"
+    },
+    {
+      "hpo_id": "HP:0001886",
+      "label": "Leukocytosis",
+      "status": "present",
+      "details": "WBC 12.1 x10^9/L"
+    },
+    {
+      "hpo_id": "HP:0001903",
+      "label": "Elevated C-reactive protein",
+      "status": "present",
+      "details": "hs-CRP 58.91 mg/L"
+    },
+    {
+      "hpo_id": "HP:0001902",
+      "label": "Anemia",
+      "status": "present",
+      "details": "Hb 112 g/L; later persistent blood loss"
+    },
+    {
+      "hpo_id": "HP:0001892",
+      "label": "Elevated D-dimer",
+      "status": "present",
+      "details": "D-dimer 8.43 μg/mL"
+    },
+    {
+      "hpo_id": "HP:0000220",
+      "label": "Fever",
+      "status": "absent"
+    },
+    {
+      "hpo_id": "HP:0002014",
+      "label": "Diarrhea",
+      "status": "absent"
+    },
+    {
+      "hpo_id": "HP:0002038",
+      "label": "Hematochezia",
+      "status": "absent"
+    }
+  ],
+  "imaging_and_tests": [
+    {
+      "test": "Pelvic ultrasound (outside clinic)",
+      "finding": "Pelvic mass ~13 x 10 cm"
+    },
+    {
+      "test": "Pelvic ultrasound (on admission)",
+      "finding": "Cystic-solid mass 13 x 11 x 15 cm anterior to uterus; irregularly thickened wall; septations; no flow signal; uterus/ovaries normal"
+    },
+    {
+      "test": "Laboratory tests",
+      "finding": "WBC elevated; CRP elevated; CA125 1033 U/mL; coagulation abnormalities; liver/kidney function normal"
+    },
+    {
+      "test": "Transumbilical laparoscopic exploration",
+      "finding": "Omentum+intestinal adhesions forming ~15 cm mass with bleeding/necrosis; hemoperitoneum ~1000 mL; scattered omental nodules; pelvic hemorrhage ~1500 mL"
+    },
+    {
+      "test": "Intraoperative frozen section",
+      "finding": "Malignant epithelioid cells with necrosis; further IHC recommended"
+    },
+    {
+      "test": "Definitive pathology + immunohistochemistry",
+      "finding": "Malignant extrarenal rhabdoid tumor; INI1 negative; CK positive; vimentin positive"
+    },
+    {
+      "test": "PET-CT (postoperative)",
+      "finding": "No other primary cancers or metastases detected"
+    }
+  ],
+  "genes_mentioned": [
+    {
+      "gene": "SMARCB1",
+      "alias": [
+        "INI1",
+        "hSNF5"
+      ],
+      "context": "Tumor suppressor implicated; IHC shows loss of INI1 protein expression (diagnostic clue)",
+      "alteration": "Loss of INI1 protein expression (IHC); often associated with 22q11.2 deletions/mutations"
+    }
+  ],
+  "diagnosis": {
+    "primary": "Primary extrarenal rhabdoid tumor of the greater omentum",
+    "complications": [
+      "Tumor rupture with hemorrhage and necrosis",
+      "Peritoneal implants / adjacent invasion (per pathology sites)"
+    ]
+  },
+  "decision_points": [
+    {
+      "stage_id": "A_initial_pelvic_mass_and_pain",
+      "input_available_to_system": [
+        "Adolescent female with >10 days lower abdominal pain",
+        "Large pelvic mass on ultrasound",
+        "No fever, chills, nausea/vomiting initially"
+      ],
+      "doctor_next_steps_ranked": [
+        {
+          "rank": 1,
+          "action": "Pelvic/abdominal ultrasound to characterize mass and assess ovaries/uterus",
+          "category": "imaging",
+          "mrr_weight": 1.0
+        },
+        {
+          "rank": 2,
+          "action": "Laboratory evaluation (CBC, inflammatory markers, tumor markers, coagulation)",
+          "category": "lab_workup",
+          "mrr_weight": 0.5
+        },
+        {
+          "rank": 3,
+          "action": "Urgent surgical evaluation for suspected torsion/acute abdomen when pain worsens",
+          "category": "clinical_management",
+          "mrr_weight": 0.3333333333
+        }
+      ]
+    },
+    {
+      "stage_id": "B_intraoperative_findings_large_omental_mass_with_hemorrhage",
+      "input_available_to_system": [
+        "Large purplish-red omental mass with bleeding/necrosis",
+        "Normal uterus and ovaries",
+        "Hemoperitoneum"
+      ],
+      "doctor_next_steps_ranked": [
+        {
+          "rank": 1,
+          "action": "Intraoperative frozen section pathology to assess malignancy",
+          "category": "pathology",
+          "mrr_weight": 1.0
+        },
+        {
+          "rank": 2,
+          "action": "Surgical debulking/omentectomy and resection of involved lesions",
+          "category": "surgery",
+          "mrr_weight": 0.5
+        },
+        {
+          "rank": 3,
+          "action": "Send tissue for definitive histology + immunohistochemistry panel",
+          "category": "pathology",
+          "mrr_weight": 0.3333333333
+        }
+      ]
+    },
+    {
+      "stage_id": "C_pathologic_workup_for_rhabdoid_tumor",
+      "input_available_to_system": [
+        "Rhabdoid morphology with necrosis",
+        "Broad IHC panel results",
+        "INI1 negative"
+      ],
+      "doctor_next_steps_ranked": [
+        {
+          "rank": 1,
+          "action": "Use INI1/SMARCB1 loss (IHC) as key diagnostic discriminator for rhabdoid tumor",
+          "category": "molecular_pathology",
+          "mrr_weight": 1.0
+        },
+        {
+          "rank": 2,
+          "action": "Exclude alternative tumors via IHC (e.g., desmin, S100, WT1, TLE1)",
+          "category": "differential_diagnosis",
+          "mrr_weight": 0.5
+        },
+        {
+          "rank": 3,
+          "action": "Staging workup (PET-CT) to evaluate primary vs metastatic disease",
+          "category": "staging",
+          "mrr_weight": 0.3333333333
+        }
+      ]
+    },
+    {
+      "stage_id": "D_postoperative_management_and_prognosis",
+      "input_available_to_system": [
+        "Confirmed extrarenal rhabdoid tumor",
+        "Aggressive course; rapid decline",
+        "No primary identified on PET-CT"
+      ],
+      "doctor_next_steps_ranked": [
+        {
+          "rank": 1,
+          "action": "Oncology referral for consideration of intensive chemotherapy/radiotherapy protocols (where feasible)",
+          "category": "referral",
+          "mrr_weight": 1.0
+        },
+        {
+          "rank": 2,
+          "action": "Supportive care for hemorrhage, infection, and complications",
+          "category": "supportive_care",
+          "mrr_weight": 0.5
+        },
+        {
+          "rank": 3,
+          "action": "Close surveillance/rapid reassessment given high mortality risk",
+          "category": "follow_up",
+          "mrr_weight": 0.3333333333
+        }
+      ]
+    }
+  ],
+  "outcome": {
+    "postop_course": "Rehospitalized ~2 weeks after discharge for persistent blood loss and infection; received symptomatic support",
+    "death": "Died ~1 month after operation"
+  }
+}
