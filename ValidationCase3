@@ -1,0 +1,202 @@
+{
+  "schema_version": "0.1",
+  "case_id": "male_breast_synovial_sarcoma_case",
+  "source_note": "Structured from user-provided human clinical case report. HPO IDs are best-effort approximations and should be verified against official HPO database before production use.",
+  "patient": {
+    "age_years": 17,
+    "sex": "male",
+    "family_history_breast_cancer": false,
+    "duration_of_mass_months": 10
+  },
+  "phenotypes": [
+    {
+      "hpo_id": "HP:0032408",
+      "label": "Breast mass",
+      "status": "present",
+      "details": "Right breast mass, 30x30 cm, hard, poor mobility"
+    },
+    {
+      "hpo_id": "HP:0000768",
+      "label": "Gynecomastia",
+      "status": "present",
+      "details": "Left breast enlargement"
+    },
+    {
+      "hpo_id": "HP:0002013",
+      "label": "Tenderness",
+      "status": "present",
+      "details": "Mild tenderness in mass"
+    },
+    {
+      "hpo_id": "HP:0001645",
+      "label": "Lymphadenopathy",
+      "status": "absent",
+      "details": "No palpable axillary/supraclavicular/cervical nodes"
+    },
+    {
+      "hpo_id": "HP:0003110",
+      "label": "Elevated prolactin",
+      "status": "present"
+    },
+    {
+      "hpo_id": "HP:0000847",
+      "label": "Abnormal progesterone level",
+      "status": "present"
+    },
+    {
+      "hpo_id": "HP:0002664",
+      "label": "Tumor necrosis",
+      "status": "present"
+    },
+    {
+      "hpo_id": "HP:0030677",
+      "label": "Tumor hemorrhage",
+      "status": "present"
+    }
+  ],
+  "imaging_and_tests": [
+    {
+      "test": "Breast ultrasound",
+      "finding": "Left gynecomastia; right solid cystic mass adjacent to chest wall"
+    },
+    {
+      "test": "Breast MRI",
+      "finding": "Space-occupying lesion with hemorrhage and necrosis"
+    },
+    {
+      "test": "Core needle biopsy",
+      "finding": "Immunohistochemistry consistent with synovial sarcoma"
+    },
+    {
+      "test": "FISH",
+      "finding": "SS18 gene translocation confirmed"
+    },
+    {
+      "test": "Sentinel lymph node biopsy",
+      "finding": "0/9 nodes positive"
+    }
+  ],
+  "genes_mentioned": [
+    {
+      "gene": "SS18",
+      "alteration": "t(X;18) translocation (SS18-SSX fusion)",
+      "associated_condition": "Synovial sarcoma"
+    },
+    {
+      "gene": "SSX1/SSX2",
+      "alteration": "Fusion partner (SS18-SSX)",
+      "associated_condition": "Synovial sarcoma"
+    }
+  ],
+  "diagnosis": {
+    "primary": "Biphasic synovial sarcoma of right breast",
+    "secondary": "Left gynecomastia"
+  },
+  "decision_points": [
+    {
+      "stage_id": "A_initial_mass_evaluation",
+      "input_available_to_system": [
+        "Rapidly enlarging right breast mass in 17-year-old male",
+        "No lymphadenopathy",
+        "Mild tenderness"
+      ],
+      "doctor_next_steps_ranked": [
+        {
+          "rank": 1,
+          "action": "Breast ultrasound imaging",
+          "category": "imaging",
+          "mrr_weight": 1.0
+        },
+        {
+          "rank": 2,
+          "action": "Breast MRI for local extent assessment",
+          "category": "imaging",
+          "mrr_weight": 0.5
+        },
+        {
+          "rank": 3,
+          "action": "Ultrasound-guided core needle biopsy",
+          "category": "procedure",
+          "mrr_weight": 0.3333333333
+        }
+      ]
+    },
+    {
+      "stage_id": "B_pathologic_confirmation",
+      "input_available_to_system": [
+        "Suspicious malignant tumor on biopsy",
+        "IHC markers positive (SS18-SSX, TLE1, CK, EMA, etc.)"
+      ],
+      "doctor_next_steps_ranked": [
+        {
+          "rank": 1,
+          "action": "Confirm diagnosis with FISH for SS18 gene translocation",
+          "category": "molecular_test",
+          "mrr_weight": 1.0
+        },
+        {
+          "rank": 2,
+          "action": "Surgical planning for radical resection",
+          "category": "treatment_plan",
+          "mrr_weight": 0.5
+        }
+      ]
+    },
+    {
+      "stage_id": "C_surgical_management",
+      "input_available_to_system": [
+        "Confirmed synovial sarcoma",
+        "Large tumor invading ribs",
+        "No nodal metastasis"
+      ],
+      "doctor_next_steps_ranked": [
+        {
+          "rank": 1,
+          "action": "Extended radical mastectomy with rib resection and negative margin confirmation",
+          "category": "surgery",
+          "mrr_weight": 1.0
+        },
+        {
+          "rank": 2,
+          "action": "Chest wall reconstruction using TRAM flap",
+          "category": "reconstruction",
+          "mrr_weight": 0.5
+        },
+        {
+          "rank": 3,
+          "action": "Postoperative radiotherapy due to large tumor size",
+          "category": "adjuvant_therapy",
+          "mrr_weight": 0.3333333333
+        }
+      ]
+    },
+    {
+      "stage_id": "D_postoperative_followup",
+      "input_available_to_system": [
+        "Large high-risk tumor",
+        "Negative surgical margins",
+        "High Ki-67 (70%)"
+      ],
+      "doctor_next_steps_ranked": [
+        {
+          "rank": 1,
+          "action": "Recommend postoperative radiotherapy to reduce recurrence risk",
+          "category": "adjuvant_therapy",
+          "mrr_weight": 1.0
+        },
+        {
+          "rank": 2,
+          "action": "Consider systemic therapy (chemotherapy or clinical trial) in high-risk scenario",
+          "category": "systemic_therapy",
+          "mrr_weight": 0.5
+        },
+        {
+          "rank": 3,
+          "action": "Long-term surveillance for recurrence/metastasis",
+          "category": "follow_up",
+          "mrr_weight": 0.3333333333
+        }
+      ]
+    }
+  ]
+}
