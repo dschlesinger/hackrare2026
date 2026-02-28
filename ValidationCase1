@@ -1,0 +1,118 @@
+{
+    "case_id": "breast_cancer_covid_case",
+    "patient": {
+        "age": 62,
+        "sex": "female",
+        "ancestry": "Ashkenazi Jewish",
+        "family_history_breast_ovarian_cancer": false
+    },
+    "phenotypes": [
+        {
+            "hpo": "HP:0032408",
+            "label": "Breast mass",
+            "status": "present"
+        },
+        {
+            "hpo": "HP:0003002",
+            "label": "Breast carcinoma",
+            "status": "present"
+        },
+        {
+            "hpo": "HP:0034752",
+            "label": "Axillary lymphadenopathy",
+            "status": "absent"
+        },
+        {
+            "hpo": "HP:0002099",
+            "label": "Asthma",
+            "status": "present"
+        },
+        {
+            "hpo": "HP:0010619",
+            "label": "Fibroadenoma of the breast",
+            "status": "past_history"
+        }
+    ],
+    "genes_mentioned": [
+        "BRCA1",
+        "BRCA2",
+        "ERBB2",
+        "ESR1",
+        "PGR"
+    ],
+    "key_results": {
+        "imaging": "spiculated irregular mass; US mass 3.1 x 1.5 x 1.2 cm; axillary nodes normal",
+        "pathology": "invasive ductal carcinoma grade 2; ER/PR positive; HER2 FISH negative",
+        "genomic_assay": {
+            "name": "Oncotype DX 21-gene",
+            "recurrence_score": 24
+        }
+    },
+    "decision_points": [
+        {
+            "stage": "A_initial_mass",
+            "recommended_next_steps_ranked": [
+                {
+                    "rank": 1,
+                    "action": "diagnostic mammography (bilateral)",
+                    "mrr_weight": 1.0
+                },
+                {
+                    "rank": 2,
+                    "action": "targeted breast ultrasound",
+                    "mrr_weight": 0.5
+                },
+                {
+                    "rank": 3,
+                    "action": "US-guided core needle biopsy",
+                    "mrr_weight": 0.333
+                }
+            ]
+        },
+        {
+            "stage": "B_post_biopsy",
+            "recommended_next_steps_ranked": [
+                {
+                    "rank": 1,
+                    "action": "multidisciplinary breast oncology referral",
+                    "mrr_weight": 1.0
+                },
+                {
+                    "rank": 2,
+                    "action": "surgery planning + sentinel node biopsy",
+                    "mrr_weight": 0.5
+                },
+                {
+                    "rank": 3,
+                    "action": "genetic counseling/testing (BRCA-focused)",
+                    "mrr_weight": 0.333
+                },
+                {
+                    "rank": 4,
+                    "action": "21-gene recurrence score assay to guide chemo",
+                    "mrr_weight": 0.25
+                }
+            ]
+        },
+        {
+            "stage": "C_covid_constraints",
+            "recommended_next_steps_ranked": [
+                {
+                    "rank": 1,
+                    "action": "neoadjuvant aromatase inhibitor therapy",
+                    "mrr_weight": 1.0
+                },
+                {
+                    "rank": 2,
+                    "action": "use genomic score to decide chemo vs endocrine",
+                    "mrr_weight": 0.5
+                },
+                {
+                    "rank": 3,
+                    "action": "monitor response with follow-up ± imaging",
+                    "mrr_weight": 0.333
+                }
+            ]
+        }
+    ]
+}
