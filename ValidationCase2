@@ -1,0 +1,235 @@
+{
+  "schema_version": "0.1",
+  "case_id": "caid_cipo_pediatric_case",
+  "source_note": "Structured from user-provided clinical case text (human medical case report). HPO IDs are best-effort approximations and should be verified against official HPO database before production use.",
+  "patient": {
+    "age_years": 10,
+    "sex": "male",
+    "consanguinity": "Fourth-degree parental consanguinity",
+    "medical_history": [
+      {
+        "condition": "Hypothyroidism",
+        "hpo_id": "HP:0000821",
+        "status": "present",
+        "treated_with": "Levothyroxine"
+      }
+    ]
+  },
+  "phenotypes": [
+    {
+      "hpo_id": "HP:0002027",
+      "label": "Abdominal pain",
+      "status": "present"
+    },
+    {
+      "hpo_id": "HP:0002013",
+      "label": "Vomiting",
+      "status": "present"
+    },
+    {
+      "hpo_id": "HP:0003270",
+      "label": "Abdominal distension",
+      "status": "present"
+    },
+    {
+      "hpo_id": "HP:0002019",
+      "label": "Intestinal pseudo-obstruction",
+      "status": "present"
+    },
+    {
+      "hpo_id": "HP:0001645",
+      "label": "Bradycardia",
+      "status": "present"
+    },
+    {
+      "hpo_id": "HP:0011675",
+      "label": "Cardiac arrhythmia",
+      "status": "present"
+    },
+    {
+      "hpo_id": "HP:0001644",
+      "label": "Supravalvular pulmonary stenosis",
+      "status": "present"
+    },
+    {
+      "hpo_id": "HP:0001889",
+      "label": "Increased bowel sounds",
+      "status": "present"
+    },
+    {
+      "hpo_id": "HP:0002017",
+      "label": "Nausea",
+      "status": "present"
+    },
+    {
+      "hpo_id": "HP:0002608",
+      "label": "Eosinophilic gastritis/duodenitis features",
+      "status": "present"
+    },
+    {
+      "hpo_id": "HP:0002018",
+      "label": "Constipation",
+      "status": "unknown"
+    },
+    {
+      "hpo_id": "HP:0000739",
+      "label": "Family history of similar disease",
+      "status": "absent"
+    }
+  ],
+  "imaging_and_tests": [
+    {
+      "test": "Abdominal X-ray",
+      "finding": "Dilated bowel loops with air-fluid level"
+    },
+    {
+      "test": "CT abdomen",
+      "finding": "Dilated small bowel loops without mechanical obstruction"
+    },
+    {
+      "test": "Upper GI endoscopy",
+      "finding": "Erosive gastritis; mild chronic gastritis; mild duodenitis"
+    },
+    {
+      "test": "Echocardiography",
+      "finding": "Supravalvular pulmonary stenosis (moderate gradient 40 mmHg)"
+    },
+    {
+      "test": "24-hour Holter monitor",
+      "finding": "PVC, PAC, pauses up to 2346 ms, bradycardia episodes"
+    }
+  ],
+  "genes_mentioned": [
+    {
+      "gene": "SGOL1",
+      "variant": "c.67A>G (p.Lys23Glu)",
+      "zygosity": "homozygous",
+      "associated_condition": "Chronic atrial and intestinal dysrhythmia (CAID)",
+      "inheritance": "Autosomal recessive"
+    }
+  ],
+  "diagnoses": [
+    {
+      "condition": "Chronic Intestinal Pseudo-Obstruction (CIPO)",
+      "status": "confirmed"
+    },
+    {
+      "condition": "Chronic Atrial and Intestinal Dysrhythmia (CAID)",
+      "status": "genetically_confirmed"
+    }
+  ],
+  "decision_points": [
+    {
+      "stage_id": "A_initial_gastrointestinal_presentation",
+      "input_available_to_system": [
+        "Abdominal pain",
+        "Recurrent vomiting",
+        "Abdominal distension",
+        "No prior abdominal surgery"
+      ],
+      "doctor_next_steps_ranked": [
+        {
+          "rank": 1,
+          "action": "Imaging to exclude mechanical obstruction (X-ray, CT)",
+          "category": "imaging",
+          "mrr_weight": 1.0
+        },
+        {
+          "rank": 2,
+          "action": "Comprehensive laboratory tests to evaluate metabolic and systemic causes",
+          "category": "lab_workup",
+          "mrr_weight": 0.5
+        },
+        {
+          "rank": 3,
+          "action": "Upper GI endoscopy with biopsy",
+          "category": "procedure",
+          "mrr_weight": 0.3333333333
+        }
+      ]
+    },
+    {
+      "stage_id": "B_confirmed_pseudo_obstruction_without_mechanical_cause",
+      "input_available_to_system": [
+        "Dilated bowel loops without obstruction",
+        "Normal labs except hypothyroidism",
+        "Diagnosis of CIPO established"
+      ],
+      "doctor_next_steps_ranked": [
+        {
+          "rank": 1,
+          "action": "Investigate underlying causes including cardiac evaluation (echocardiography, Holter)",
+          "category": "cardiac_evaluation",
+          "mrr_weight": 1.0
+        },
+        {
+          "rank": 2,
+          "action": "Review medication and exclude drug-induced dysmotility",
+          "category": "medication_review",
+          "mrr_weight": 0.5
+        },
+        {
+          "rank": 3,
+          "action": "Genetic counseling referral due to suspicion of hereditary cause",
+          "category": "genetic_referral",
+          "mrr_weight": 0.3333333333
+        }
+      ]
+    },
+    {
+      "stage_id": "C_cardiac_abnormalities_and_consanguinity_identified",
+      "input_available_to_system": [
+        "Bradycardia and arrhythmia",
+        "Supravalvular pulmonary stenosis",
+        "Consanguineous parents"
+      ],
+      "doctor_next_steps_ranked": [
+        {
+          "rank": 1,
+          "action": "Whole-exome sequencing to identify genetic etiology",
+          "category": "genetic_test",
+          "mrr_weight": 1.0
+        },
+        {
+          "rank": 2,
+          "action": "Targeted analysis of SGOL1 gene for CAID suspicion",
+          "category": "targeted_genetic_test",
+          "mrr_weight": 0.5
+        },
+        {
+          "rank": 3,
+          "action": "Confirm autosomal recessive inheritance pattern",
+          "category": "inheritance_analysis",
+          "mrr_weight": 0.3333333333
+        }
+      ]
+    },
+    {
+      "stage_id": "D_post_genetic_confirmation_management",
+      "input_available_to_system": [
+        "Homozygous SGOL1 mutation identified",
+        "Diagnosis of CAID confirmed"
+      ],
+      "doctor_next_steps_ranked": [
+        {
+          "rank": 1,
+          "action": "Initiate pharmacologic therapy (cyclic rifaximin, propranolol)",
+          "category": "treatment",
+          "mrr_weight": 1.0
+        },
+        {
+          "rank": 2,
+          "action": "Monitor cardiac rhythm and consider pacemaker if SSS progresses",
+          "category": "cardiac_management",
+          "mrr_weight": 0.5
+        },
+        {
+          "rank": 3,
+          "action": "Provide long-term genetic counseling for family",
+          "category": "genetic_counseling",
+          "mrr_weight": 0.3333333333
+        }
+      ]
+    }
+  ]
+}
