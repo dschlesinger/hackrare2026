@@ -1,0 +1,1 @@
+wget -O prime_kg.csv https://dataverse.harvard.edu/api/access/datafile/6180620
