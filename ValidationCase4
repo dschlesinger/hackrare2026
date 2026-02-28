@@ -1,0 +1,220 @@
+{
+  "schema_version": "0.1",
+  "case_id": "adult_chf_adpkd_pkd1_case",
+  "source_note": "Structured from user-provided human clinical case report. HPO IDs are best-effort approximations and should be verified against official HPO database before production use.",
+  "patient": {
+    "age_years": 31,
+    "sex": "female",
+    "family_history": {
+      "father": "Hepatomegaly, splenomegaly, bilateral renal cysts",
+      "mother": "Asymptomatic",
+      "brother": "Splenectomy for variceal bleeding; bilateral renal cysts"
+    }
+  },
+  "phenotypes": [
+    {
+      "hpo_id": "HP:0001744",
+      "label": "Splenomegaly",
+      "status": "present"
+    },
+    {
+      "hpo_id": "HP:0001402",
+      "label": "Portal hypertension",
+      "status": "present"
+    },
+    {
+      "hpo_id": "HP:0002573",
+      "label": "Esophageal varices",
+      "status": "present"
+    },
+    {
+      "hpo_id": "HP:0001974",
+      "label": "Hematemesis",
+      "status": "present"
+    },
+    {
+      "hpo_id": "HP:0002014",
+      "label": "Melena",
+      "status": "present"
+    },
+    {
+      "hpo_id": "HP:0002240",
+      "label": "Thrombocytopenia",
+      "status": "present"
+    },
+    {
+      "hpo_id": "HP:0003154",
+      "label": "Elevated alkaline phosphatase",
+      "status": "present"
+    },
+    {
+      "hpo_id": "HP:0001990",
+      "label": "Dilated intrahepatic bile ducts",
+      "status": "present"
+    },
+    {
+      "hpo_id": "HP:0000107",
+      "label": "Renal cysts",
+      "status": "present"
+    },
+    {
+      "hpo_id": "HP:0001410",
+      "label": "Autosomal dominant inheritance",
+      "status": "suspected"
+    }
+  ],
+  "imaging_and_tests": [
+    {
+      "test": "Abdominal ultrasound",
+      "finding": "Cirrhosis, splenomegaly, portal vein dilation"
+    },
+    {
+      "test": "Contrast-enhanced CT",
+      "finding": "Cirrhosis, splenomegaly, polycystic kidneys, ascites, portal hypertension"
+    },
+    {
+      "test": "MRCP",
+      "finding": "Dilated intrahepatic and extrahepatic bile ducts"
+    },
+    {
+      "test": "Liver biopsy",
+      "finding": "Bridging fibrosis, enlarged portal areas, bile duct proliferation consistent with CHF"
+    },
+    {
+      "test": "Gastroscopy",
+      "finding": "Severe esophageal and gastric variceal bleeding"
+    }
+  ],
+  "genes_mentioned": [
+    {
+      "gene": "PKD1",
+      "variants": [
+        {
+          "cDNA": "c.8296T>C",
+          "protein": "p.Ser2766Pro",
+          "inheritance": "paternal"
+        },
+        {
+          "cDNA": "c.9653G>C",
+          "protein": "p.Trp3218Ser",
+          "inheritance": "maternal"
+        }
+      ],
+      "associated_condition": "Autosomal dominant polycystic kidney disease (ADPKD)"
+    }
+  ],
+  "diagnosis": {
+    "primary": "Congenital hepatic fibrosis (portal hypertension type)",
+    "associated_condition": "Autosomal dominant polycystic kidney disease (ADPKD)"
+  },
+  "decision_points": [
+    {
+      "stage_id": "A_initial_gastrointestinal_bleeding",
+      "input_available_to_system": [
+        "Hematemesis and melena",
+        "Splenomegaly",
+        "Thrombocytopenia"
+      ],
+      "doctor_next_steps_ranked": [
+        {
+          "rank": 1,
+          "action": "Urgent gastroscopy to identify and manage variceal bleeding",
+          "category": "endoscopy",
+          "mrr_weight": 1.0
+        },
+        {
+          "rank": 2,
+          "action": "Abdominal imaging (CT, ultrasound) to evaluate portal hypertension and liver structure",
+          "category": "imaging",
+          "mrr_weight": 0.5
+        },
+        {
+          "rank": 3,
+          "action": "Comprehensive laboratory evaluation including liver function and viral hepatitis screening",
+          "category": "lab_workup",
+          "mrr_weight": 0.3333333333
+        }
+      ]
+    },
+    {
+      "stage_id": "B_structural_liver_and_kidney_abnormalities_identified",
+      "input_available_to_system": [
+        "Dilated bile ducts",
+        "Polycystic kidneys",
+        "Portal hypertension"
+      ],
+      "doctor_next_steps_ranked": [
+        {
+          "rank": 1,
+          "action": "Liver biopsy to confirm congenital hepatic fibrosis",
+          "category": "histopathology",
+          "mrr_weight": 1.0
+        },
+        {
+          "rank": 2,
+          "action": "Genetic testing for PKD-related mutations (PKD1/PKD2)",
+          "category": "genetic_test",
+          "mrr_weight": 0.5
+        },
+        {
+          "rank": 3,
+          "action": "Assess family members for ADPKD features",
+          "category": "family_screening",
+          "mrr_weight": 0.3333333333
+        }
+      ]
+    },
+    {
+      "stage_id": "C_genetic_confirmation",
+      "input_available_to_system": [
+        "Compound heterozygous PKD1 mutations",
+        "Family history of renal cysts"
+      ],
+      "doctor_next_steps_ranked": [
+        {
+          "rank": 1,
+          "action": "Diagnose CHF associated with ADPKD",
+          "category": "diagnostic_confirmation",
+          "mrr_weight": 1.0
+        },
+        {
+          "rank": 2,
+          "action": "Provide genetic counseling regarding inheritance and penetrance",
+          "category": "genetic_counseling",
+          "mrr_weight": 0.5
+        }
+      ]
+    },
+    {
+      "stage_id": "D_management_of_portal_hypertension",
+      "input_available_to_system": [
+        "Confirmed CHF with portal hypertension",
+        "Active variceal bleeding"
+      ],
+      "doctor_next_steps_ranked": [
+        {
+          "rank": 1,
+          "action": "Endoscopic variceal ligation (EVL) and sclerotherapy",
+          "category": "treatment",
+          "mrr_weight": 1.0
+        },
+        {
+          "rank": 2,
+          "action": "Consider TIPS if recurrent or refractory bleeding",
+          "category": "interventional_radiology",
+          "mrr_weight": 0.5
+        },
+        {
+          "rank": 3,
+          "action": "Evaluate for liver transplantation in end-stage disease",
+          "category": "transplant_evaluation",
+          "mrr_weight": 0.3333333333
+        }
+      ]
+    }
+  ],
+  "follow_up": {
+    "duration_months": 18,
+    "outcome": "No recurrent variceal bleeding; significant reduction in varices on repeat gastroscopy"
+  }
+}
