@@ -109,7 +109,7 @@
         {
           "rank": 2,
           "action": "IHC panel",
-          "category": "imaging",
+          "category": "testing",
           "mrr_weight": 0.5
         },
         {
