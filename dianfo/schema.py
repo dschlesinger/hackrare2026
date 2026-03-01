@@ -6,25 +6,28 @@ class Gene:
     name: str
     diseases: List['Disease']
 
-    def __hash__(self) -> str:
+    def __hash__(self) -> int:
         return hash(self.name)
+    
+    def __repr__(self) -> str:
+        return self.name
 
 @dataclass
 class Phenotype:
     name: str
     diseases: List['DiseasePhenotypeRelation']
 
-    def __hash__(self) -> str:
+    def __hash__(self) -> int:
         return hash(self.name)
-
+    
+    def __repr__(self) -> str:
+        return self.name
+    
 @dataclass
 class DiseasePhenotypeRelation:
     phenotype: Phenotype
     disease: 'Disease'
     relation: Literal['disease_phenotype_negative', 'disease_phenotype_positive']
-
-    def __hash__(self) -> str:
-        return hash(self.name)
 
 @dataclass
 class Disease:
@@ -32,5 +35,8 @@ class Disease:
     genes: List[Gene]
     phenotypes: List[DiseasePhenotypeRelation]
 
-    def __hash__(self) -> str:
+    def __hash__(self) -> int:
         return hash(self.name)
+    
+    def __repr__(self) -> str:
+        return self.name
