@@ -1,7 +1,6 @@
 {
   "schema_version": "0.1",
   "case_id": "adult_chf_adpkd_pkd1_case",
-  "source_note": "Structured from user-provided human clinical case report. HPO IDs are best-effort approximations and should be verified against official HPO database before production use.",
   "patient": {
     "age_years": 31,
     "sex": "female",
