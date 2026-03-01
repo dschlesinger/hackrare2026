@@ -17,38 +17,33 @@
       "status": "present"
     },
     {
-      "hpo_id": "HP:0001402",
+      "hpo_id": "HP:0001409",
       "label": "Portal hypertension",
       "status": "present"
     },
     {
-      "hpo_id": "HP:0002573",
-      "label": "Esophageal varices",
+      "hpo_id": "HP:0002040",
+      "label": "Esophageal varix",
       "status": "present"
     },
     {
-      "hpo_id": "HP:0001974",
+      "hpo_id": "HP:0002248",
       "label": "Hematemesis",
       "status": "present"
     },
     {
-      "hpo_id": "HP:0002014",
+      "hpo_id": "HP:0002249",
       "label": "Melena",
       "status": "present"
     },
     {
-      "hpo_id": "HP:0002240",
+      "hpo_id": "HP:313900",
       "label": "Thrombocytopenia",
       "status": "present"
     },
     {
-      "hpo_id": "HP:0003154",
+      "hpo_id": "HP:0003155",
       "label": "Elevated alkaline phosphatase",
-      "status": "present"
-    },
-    {
-      "hpo_id": "HP:0001990",
-      "label": "Dilated intrahepatic bile ducts",
       "status": "present"
     },
     {
@@ -58,7 +53,7 @@
     },
     {
       "hpo_id": "HP:0001410",
-      "label": "Autosomal dominant inheritance",
+      "label": "Decreased liver function",
       "status": "suspected"
     }
   ],
