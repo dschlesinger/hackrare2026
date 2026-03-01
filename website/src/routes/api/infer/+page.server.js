@@ -15,7 +15,7 @@ export const actions = {
 
         const data = await response.json();
 
-        const { tests, diseases } = data;
-        return { tests, diseases };
+        const { tests, diseases, total_information } = data;
+        return { tests, diseases, total_information };
     }
 };

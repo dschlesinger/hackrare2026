@@ -131,12 +131,14 @@ def get_disease_probs(gene_tests, pheno_tests, ruled_out_genes, ruled_out_phenot
 
     return probs
 
-def get_possible_tests(gene_tests, pheno_tests) -> List[Gene | Phenotype]:
+def get_possible_tests(gene_tests, pheno_tests, not_present_genes, not_present_pheno) -> List[Gene | Phenotype]:
 
     tests = set()
 
     gt = [gene_lookup[g] for g in gene_tests]
     pt = [phenotype_lookup[p] for p in pheno_tests]
+    ngt = [gene_lookup[g] for g in not_present_genes]
+    npt = [phenotype_lookup[p] for p in not_present_pheno]
 
     for t in gt:
         for d in t.diseases:
@@ -153,7 +155,7 @@ def get_possible_tests(gene_tests, pheno_tests) -> List[Gene | Phenotype]:
                 tests.add(dp.phenotype)
     
     # Remove ones from patient
-    tests -= set(gt) | set(pt)
+    tests -= set(gt) | set(pt) | set(ngt) | set(npt)
 
     return list(tests)
 
@@ -182,11 +184,11 @@ def score_test(gene_tests, pheno_tests, not_present_genes, not_present_pheno, ba
 
     return base_info - ((net + nef) / 2)
 
-def forward(gene_tests: List[str], pheno_tests: List[str], not_present_genes: List[str], not_present_pheno: List[str]) -> Tuple[Dict, Dict]:
+def forward(gene_tests: List[str], pheno_tests: List[str], not_present_genes: List[str], not_present_pheno: List[str]) -> Tuple[Dict, Dict, float]:
 
     disease_probs: Dict = get_disease_probs(gene_tests, pheno_tests, not_present_genes, not_present_pheno)
 
-    ptests = get_possible_tests(gene_tests, pheno_tests)
+    ptests = get_possible_tests(gene_tests, pheno_tests, not_present_genes, not_present_pheno)
 
     print('[bold purple]Entropy: [/bold purple]', base_info := entropy(disease_probs.values()))
 
@@ -194,7 +196,7 @@ def forward(gene_tests: List[str], pheno_tests: List[str], not_present_genes: Li
 
     print(*[f'{d}: {test_info[d]}' for d in sorted(list(test_info.keys()), key=lambda d: test_info[d])], sep='\n')
 
-    return {pt.name: s for pt, s in test_info.items()}, {d.name: s for d, s in disease_probs.items()}
+    return {pt.name: s for pt, s in test_info.items()}, {d.name: s for d, s in disease_probs.items()}, base_info
 
 class InferenceRequest(pydantic.BaseModel):
     gene_tests: List[str]
@@ -205,15 +207,17 @@ class InferenceRequest(pydantic.BaseModel):
 class InferenceReturn(pydantic.BaseModel):
     tests: Dict
     diseases: Dict
+    total_information: float
 
 @app.post('/inference')
 def inference(r: InferenceRequest) -> InferenceReturn:
 
-    tests, disease = forward(r.gene_tests, r.pheno_tests, r.not_present_genes, r.not_present_pheno)
+    tests, disease, total_information = forward(r.gene_tests, r.pheno_tests, r.not_present_genes, r.not_present_pheno)
 
     return InferenceReturn(
         tests=tests,
-        diseases=disease
+        diseases=disease,
+        total_information=total_information,
     )
 
 # if __name__ == '__main__':

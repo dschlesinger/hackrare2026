@@ -1,5 +1,6 @@
 <script lang='ts'>
     import { enhance } from '$app/forms';
+    import * as Tabs from "$lib/components/ui/tabs/index.js";
 
     type Item = {
         id: number;
@@ -12,9 +13,11 @@
     let phenoInput = $state('');
     let items: Item[] = $state([]);
     let nextId = $state(0);
+    let submitted = $state(false);
 
     let tests = $state(null);
     let diseases = $state(null);
+    let total_information = $state(null);
 
     function addItem(type: 'gene' | 'pheno') {
         const value = type === 'gene' ? geneInput.trim() : phenoInput.trim();
@@ -41,14 +44,12 @@
     }
 
     function getLists() {
-        const rv = {
+        return {
             gene_tests: items.filter(i => i.type === 'gene' && i.present).map(i => i.value),
             pheno_tests: items.filter(i => i.type === 'pheno' && i.present).map(i => i.value),
             not_present_genes: items.filter(i => i.type === 'gene' && !i.present).map(i => i.value),
             not_present_pheno: items.filter(i => i.type === 'pheno' && !i.present).map(i => i.value),
         };
-        console.log(rv)
-        return rv;
     }
 </script>
 
@@ -92,7 +93,7 @@
     {#if items.length > 0}
         <ul class="space-y-2">
             {#each items as item (item.id)}
-                <li class="flex items-center justify-between border rounded px-4 py-2 text-sm {item.present ? 'bg-green' : 'bg-red'}">
+                <li class="flex items-center justify-between border rounded px-4 py-2 text-sm {item.present ? 'bg-green-50' : 'bg-red-50'}">
                     <div class="flex items-center gap-3">
                         <span class="font-mono text-xs px-2 py-0.5 rounded-full {item.type === 'gene' ? 'bg-blue-100 text-blue-700' : 'bg-purple-100 text-purple-700'}">
                             {item.type}
@@ -103,7 +104,6 @@
                         {/if}
                     </div>
                     <div class="flex gap-1">
-                        <!-- Toggle present/absent -->
                         <button
                             type="button"
                             title="{item.present ? 'Mark absent' : 'Mark present'}"
@@ -112,7 +112,6 @@
                         >
                             {item.present ? '✓' : '✗'}
                         </button>
-                        <!-- Toggle gene/pheno -->
                         <button
                             type="button"
                             title="Switch to {item.type === 'gene' ? 'pheno' : 'gene'}"
@@ -121,7 +120,6 @@
                         >
                             {item.type === 'gene' ? '→ pheno' : '→ gene'}
                         </button>
-                        <!-- Delete -->
                         <button
                             type="button"
                             title="Delete"
@@ -143,11 +141,14 @@
         action="/api/infer"
         method="POST"
         use:enhance={() => {
+            submitted = true;
             return async ({ result }) => {
                 if (result.type === 'success') {
-                    tests = result.data?.tests;
-                    diseases = result.data?.diseases;
+                    tests = result.data.tests;
+                    diseases = result.data.diseases;
+                    total_information = result.data.total_information;
                 }
+                submitted = false;
             };
         }}
     >
@@ -159,33 +160,42 @@
         <button
             type="submit"
             class="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 text-sm font-medium disabled:opacity-50"
-            disabled={items.length === 0}
+            disabled={items.length === 0 || submitted}
         >
-            Submit
+            {submitted ? 'Loading...' : 'Submit'}
         </button>
     </form>
 
     <!-- Results -->
     {#if tests || diseases}
-        <div class="space-y-4 mt-4">
-            {#if tests}
-                <div class="border rounded p-4 flex flex-col gap-y-2">
-                    {#each Object.keys(tests).toSorted((a, b) => tests[b] - tests[a]) as t}
-                        <div>
-                            {t}: {tests[t].toFixed(2)}
-                        </div>
-                    {/each}
-                </div>
-            {/if}
-            {#if diseases}
-                <div class="border rounded p-4 flex flex-col gap-y-2">
-                    {#each Object.keys(diseases).toSorted((a, b) => diseases[b] - diseases[a]) as t}
-                        <div>
-                            {t}: {diseases[t].toFixed(2)}
-                        </div>
-                    {/each}
-                </div>
-            {/if}
-        </div>
+        Total Information: {total_information ? total_information : 'No info on total_information'}
+        <Tabs.Root value="tests">
+            <Tabs.List>
+                <Tabs.Trigger value="tests">Tests</Tabs.Trigger>
+                <Tabs.Trigger value="diseases">Diseases</Tabs.Trigger>
+            </Tabs.List>
+
+            <Tabs.Content value="tests">
+                {#if tests}
+                    <div class="border rounded p-4 flex flex-col gap-y-2 mt-4">
+                        {#each Object.keys(tests).toSorted((a, b) => tests[b] - tests[a]) as t}
+                            <div>{t}: {tests[t].toFixed(2)}</div>
+                        {/each}
+                    </div>
+                {/if}
+            </Tabs.Content>
+
+            <Tabs.Content value="diseases">
+                {#if diseases}
+                    Number of possible diseases: {Object.keys(diseases).length}
+                    <div class="border rounded p-4 flex flex-col gap-y-2 mt-4">
+                        {#each Object.keys(diseases).toSorted((a, b) => diseases[b] - diseases[a]) as t}
+                            <div>{t}: {diseases[t].toFixed(2)}</div>
+                        {/each}
+                    </div>
+                {/if}
+            </Tabs.Content>
+        </Tabs.Root>
     {/if}
+
 </div>
