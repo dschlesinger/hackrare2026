@@ -3,21 +3,90 @@
 **End-to-end rare disease diagnostic platform** built on
 Streamlit + FastAPI + Postgres (pgvector) + Redis + Kubernetes.
 
-## Architecture
+> **Package manager:** [uv](https://docs.astral.sh/uv/) (fast Python package manager by Astral)
 
-| Service | Port | Purpose |
-|---------|------|---------|
-| Streamlit UI | 8501 | Case intake, differential, next-best-steps |
-| FastAPI API | 8000 | `/recommend`, `/simulate_step`, `/validate_schema`, `/health` |
-| Postgres + pgvector | 5432 | Cases, phenotype events, disease knowledge, embeddings |
-| Redis | 6379 | HPO lookup cache, top-disease cache, /recommend response cache |
-| MinIO | 9000 | Raw datasets, ETL outputs, trained artifacts |
-| MLflow | 5000 | Experiment tracking, model registry |
-| Prometheus | 9090 | Metrics collection |
-| Grafana | 3000 | Dashboards + alerting |
-| n8n | 5678 | Pipeline orchestration |
+---
 
-## Quick Start (Docker Compose)
+## Quick Run (pre-built data included)
+
+If the data artifacts already exist (the `diageno/data/` directory is populated), you can start the app immediately:
+
+```bash
+# Install uv if not already installed
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Install dependencies and start both servers
+cd hackrare2026
+uv sync
+uv run uvicorn diageno.api.main:app --host 0.0.0.0 --port 8099 --workers 1 &
+uv run streamlit run diageno/ui/app.py --server.port 8501
+```
+
+Then open:
+- **UI:** http://localhost:8501
+- **API docs:** http://localhost:8099/docs
+- **Health check:** http://localhost:8099/health
+
+---
+
+## Full Build + Run (from scratch)
+
+### Step 1: Environment Setup
+
+```bash
+cd hackrare2026
+
+# Install uv (skip if already installed)
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Create venv + install all dependencies (reads pyproject.toml)
+uv sync
+
+# Or with dev tools (pytest, ruff, mypy, black):
+uv sync --extra dev
+```
+
+### Step 2: Download Raw Data (Bronze)
+
+```bash
+# Downloads HPO ontology, phenopacket-store, Orphadata XMLs, MONDO
+uv run python -m diageno.etl.download_bronze
+```
+
+### Step 3: Parse into Parquet (Silver)
+
+```bash
+# Produces: hpo_terms, diseases, disease_hpo, disease_gene, cases, etc.
+uv run python -m diageno.etl.parse_silver
+```
+
+### Step 4: (Optional) Load into Postgres (Gold)
+
+```bash
+# Only needed if running Postgres — the app works fine without it
+uv run python -m diageno.etl.load_gold
+```
+
+### Step 5: Train Model Artifacts
+
+```bash
+# Builds: disease_hpo_matrix, calibration, hpo_ancestors, disease_genes, policy
+uv run python -m diageno.training.train_all --skip-embeddings --no-mlflow
+```
+
+### Step 6: Start the App
+
+```bash
+# Start FastAPI backend (port 8099)
+uv run uvicorn diageno.api.main:app --host 0.0.0.0 --port 8099 --workers 1 &
+
+# Start Streamlit frontend (port 8501)
+uv run streamlit run diageno/ui/app.py --server.port 8501
+```
+
+---
+
+## Docker Compose
 
 ```bash
 # One-liner — starts infra, runs ETL, launches app + monitoring
@@ -38,34 +107,28 @@ docker compose run --rm etl python -m etl.load_gold
 # 3. Train model artifacts
 docker compose run --rm etl python -m training.train_all
 
-# 4. Initialize MLflow experiment
-python scripts/init_mlflow.py
-
-# 5. Open UI
+# 4. Open UI
 open http://localhost:8501
 ```
 
 ## Kubernetes (kind) Deployment
 
 ```bash
-# 1. Create cluster + build/load images
-bash scripts/setup-kind.sh
-
-# 2. Deploy all services (infra → ETL → app → monitoring)
-bash scripts/deploy-all.sh
-
-# 3. Port-forward all services for local access
-bash scripts/port-forward.sh
+bash scripts/setup-kind.sh      # Create cluster + build/load images
+bash scripts/deploy-all.sh      # Deploy all services
+bash scripts/port-forward.sh    # Port-forward for local access
 ```
 
-## n8n Pipeline Orchestration
+---
 
-Import `n8n/pipeline-workflow.json` into n8n (http://localhost:5678).
-Trigger the full ETL → Train → Smoke Test pipeline via:
+## Architecture
 
-```bash
-curl -X POST http://localhost:5678/webhook/run-pipeline
-```
+| Service | Port | Purpose |
+|---------|------|---------|
+| Streamlit UI | 8501 | Case intake, differential, next-best-steps, evaluation |
+| FastAPI API | 8099 | `/recommend`, `/evaluate`, `/health`, `/hpo/search` |
+| Postgres + pgvector | 5432 | Cases, phenotype events, disease knowledge (optional) |
+| Redis | 6379 | HPO lookup cache, response cache (optional) |
 
 ## Data Pipeline (Bronze → Silver → Gold)
 
@@ -75,45 +138,75 @@ curl -X POST http://localhost:5678/webhook/run-pipeline
 | **Silver** | Parsed + normalized Parquet files |
 | **Gold** | Loaded into Postgres tables with indexes |
 
-## "Trained" Model Artifacts
+## Model Artifacts
 
 | Artifact | Description |
 |----------|-------------|
-| A: Disease Posterior Scorer | P(disease \| observed HPOs), calibrated |
-| B: Next-Best-Phenotype Selector | Entropy-based HPO question ranking |
-| C: Test Recommendation Policy | Rule + calibration for test ordering |
-| D: Embedding Model | Sentence-transformer case/disease embeddings → pgvector |
+| Disease Posterior Scorer | IC-weighted cosine similarity with HPO expansion, calibrated |
+| Next-Best-Phenotype Selector | Entropy-based HPO question ranking |
+| Test Recommendation Policy | Rule + calibration for test ordering (`policy.yaml`) |
+| HPO Ancestors | Ontology ancestor graph for phenotype expansion |
+| Disease-Gene Links | Gene ↔ disease associations for genomic integration |
+
+## UI Pages
+
+| Page | Description |
+|------|-------------|
+| 1. Home | Overview and system status |
+| 2. Recommend | Enter phenotypes/genes → disease differential + uncertainty + VOI + evidence |
+| 3. Simulate Step | Step-by-step diagnostic simulation |
+| 4. Validation | Run against 5 ground-truth validation cases |
+| 5. Research Evaluation | 5 experiments: replay, missingness, calibration, ablation, clinician rubric |
+| 6. Clinician Demo | Guided 3-scenario walkthrough |
 
 ## Project Structure
 
 ```
-diageno/
-├── config/           # Settings, logging
-├── db/               # SQLAlchemy models, migrations
-├── etl/              # Bronze → Silver → Gold pipeline
-├── training/         # Model artifact builders
-├── api/              # FastAPI inference service
-├── ui/               # Streamlit application
-├── k8s/              # Kubernetes manifests
-├── monitoring/       # Prometheus + Grafana configs
-├── n8n/              # n8n workflow templates
-├── scripts/          # Deployment helper scripts
-│   ├── setup-kind.sh
-│   ├── deploy-all.sh
-│   ├── port-forward.sh
-│   ├── run-local.sh
-│   └── init_mlflow.py
-└── docker-compose.yml
+hackrare2026/
+├── pyproject.toml          # Root project config (uv reads this)
+├── uv.lock                 # Locked dependencies
+├── ValidationCase1–5       # Ground truth validation cases
+├── diageno/
+│   ├── config/             # Settings, logging
+│   ├── core/               # Patient state, uncertainty, VOI, genomic advisor, equity, evidence
+│   ├── db/                 # SQLAlchemy models, migrations
+│   ├── etl/                # Bronze → Silver → Gold pipeline
+│   ├── evaluation/         # Research metrics, replay, experiments
+│   ├── training/           # Model artifact builders
+│   ├── api/                # FastAPI inference service
+│   │   ├── routes/         # recommend, evaluate, hpo, simulate
+│   │   └── services/       # inference engine, HPO index
+│   ├── ui/                 # Streamlit application
+│   │   └── pages/          # 6 UI pages
+│   ├── data/
+│   │   ├── bronze/         # Raw downloaded files
+│   │   ├── silver/         # Parsed parquet files
+│   │   ├── gold/           # Postgres-loaded (optional)
+│   │   └── model_artifacts/# Trained artifacts (matrix, calibration, etc.)
+│   ├── k8s/                # Kubernetes manifests
+│   ├── monitoring/         # Prometheus + Grafana configs
+│   ├── n8n/                # n8n workflow templates
+│   ├── scripts/            # Deployment helper scripts
+│   └── docker-compose.yml
 ```
 
-## Service URLs (after deployment)
+## Useful Commands
 
-| Service | URL | Credentials |
-|---------|-----|-------------|
-| Streamlit UI | http://localhost:8501 | — |
-| FastAPI Docs | http://localhost:8000/docs | — |
-| Prometheus | http://localhost:9090 | — |
-| Grafana | http://localhost:3000 | admin / admin |
-| MLflow | http://localhost:5000 | — |
-| MinIO Console | http://localhost:9001 | minioadmin / minioadmin |
-| n8n | http://localhost:5678 | admin / admin |
+```bash
+# Check health
+curl http://localhost:8099/health
+
+# Run research evaluation (all 5 experiments)
+curl -X POST http://localhost:8099/evaluate \
+  -H 'Content-Type: application/json' \
+  -d '{"experiments":["replay","missingness","calibration","ablation","rubric"]}'
+
+# Run tests
+uv run pytest
+
+# Lint
+uv run ruff check diageno/
+
+# Type check
+uv run mypy diageno/
+```
