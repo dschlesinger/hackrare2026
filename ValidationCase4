@@ -183,33 +183,6 @@
           "mrr_weight": 0.5
         }
       ]
-    },
-    {
-      "stage_id": "D_management_of_portal_hypertension",
-      "input_available_to_system": [
-        "Confirmed CHF with portal hypertension",
-        "Active variceal bleeding"
-      ],
-      "doctor_next_steps_ranked": [
-        {
-          "rank": 1,
-          "action": "Endoscopic variceal ligation (EVL) and sclerotherapy",
-          "category": "treatment",
-          "mrr_weight": 1.0
-        },
-        {
-          "rank": 2,
-          "action": "Consider TIPS if recurrent or refractory bleeding",
-          "category": "interventional_radiology",
-          "mrr_weight": 0.5
-        },
-        {
-          "rank": 3,
-          "action": "Evaluate for liver transplantation in end-stage disease",
-          "category": "transplant_evaluation",
-          "mrr_weight": 0.3333333333
-        }
-      ]
     }
   ],
   "follow_up": {
