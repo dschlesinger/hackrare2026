@@ -1,0 +1,10 @@
+[project]
+name = "dianfo"
+version = "0.0.1"
+description = "Information theory approach to diagnosis by iterative testing"
+authors = [{ name = "Denali Schlesinger", email = "dsch28@bu.edu" }]
+readme = "README.md"
+requires-python = ">=3.10"
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
