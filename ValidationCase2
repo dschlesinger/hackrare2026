@@ -1,6 +1,5 @@
 {
   "case_id": "caid_cipo_pediatric_case",
-  "source_note": "Structured from user-provided clinical case text (human medical case report). HPO IDs are best-effort approximations and should be verified against official HPO database before production use.",
   "patient": {
     "age_years": 10,
     "sex": "male",
