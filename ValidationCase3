@@ -22,9 +22,9 @@
     },
     {
       "hpo_id": "HP:0002013",
-      "label": "Tenderness",
+      "label": "Vomitting",
       "status": "present",
-      "details": "Mild tenderness in mass"
+      "details": "Vomitting"
     },
     {
       "hpo_id": "HP:0001645",
