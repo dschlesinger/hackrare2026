@@ -1,0 +1,76 @@
+# Diageno alerting rules for Prometheus
+groups:
+  - name: diageno-api
+    rules:
+      # ── High error rate ────────────────────────────
+      - alert: HighAPIErrorRate
+        expr: |
+          sum(rate(diageno_api_requests_total{status=~"5.."}[5m]))
+          /
+          sum(rate(diageno_api_requests_total[5m]))
+          > 0.05
+        for: 2m
+        labels:
+          severity: critical
+          service: diageno-api
+        annotations:
+          summary: "High API error rate (>5%)"
+          description: "Error rate is {{ $value | humanizePercentage }} over the last 5 minutes."
+
+      # ── Slow responses ─────────────────────────────
+      - alert: SlowAPIResponses
+        expr: |
+          histogram_quantile(0.95, rate(diageno_api_request_duration_seconds_bucket[5m]))
+          > 5
+        for: 3m
+        labels:
+          severity: warning
+          service: diageno-api
+        annotations:
+          summary: "API p95 latency > 5s"
+          description: "p95 latency is {{ $value }}s for endpoint {{ $labels.endpoint }}."
+
+      # ── API down ───────────────────────────────────
+      - alert: APIDown
+        expr: up{job="diageno-api"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          service: diageno-api
+        annotations:
+          summary: "Diageno API is down"
+          description: "The API endpoint has been unreachable for more than 1 minute."
+
+      # ── High request rate (capacity planning) ──────
+      - alert: HighRequestRate
+        expr: sum(rate(diageno_api_requests_total[5m])) > 100
+        for: 5m
+        labels:
+          severity: warning
+          service: diageno-api
+        annotations:
+          summary: "High API request rate (>100 rps)"
+          description: "Current rate: {{ $value }} requests per second."
+
+  - name: diageno-infra
+    rules:
+      # ── Postgres connection issues ────────────────
+      - alert: PostgresDown
+        expr: pg_up == 0
+        for: 1m
+        labels:
+          severity: critical
+          service: postgres
+        annotations:
+          summary: "PostgreSQL is down"
+
+      # ── Redis memory usage ─────────────────────────
+      - alert: RedisHighMemory
+        expr: redis_memory_used_bytes / redis_memory_max_bytes > 0.9
+        for: 5m
+        labels:
+          severity: warning
+          service: redis
+        annotations:
+          summary: "Redis memory usage > 90%"
+          description: "Redis is using {{ $value | humanizePercentage }} of max memory."

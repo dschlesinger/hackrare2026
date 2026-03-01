@@ -1,0 +1,133 @@
+---
+# ETL Pipeline Jobs — run sequentially
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: download-bronze
+  namespace: diageno
+spec:
+  ttlSecondsAfterFinished: 3600
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: etl
+          image: diageno-etl:latest
+          imagePullPolicy: IfNotPresent
+          command: ["python", "-m", "diageno.etl.download_bronze"]
+          envFrom:
+            - configMapRef:
+                name: diageno-env
+          volumeMounts:
+            - name: data
+              mountPath: /data
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "250m"
+            limits:
+              memory: "2Gi"
+              cpu: "2000m"
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: data-pvc
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: parse-silver
+  namespace: diageno
+spec:
+  ttlSecondsAfterFinished: 3600
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: etl
+          image: diageno-etl:latest
+          imagePullPolicy: IfNotPresent
+          command: ["python", "-m", "diageno.etl.parse_silver"]
+          envFrom:
+            - configMapRef:
+                name: diageno-env
+          volumeMounts:
+            - name: data
+              mountPath: /data
+          resources:
+            requests:
+              memory: "1Gi"
+              cpu: "500m"
+            limits:
+              memory: "4Gi"
+              cpu: "2000m"
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: data-pvc
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: load-gold
+  namespace: diageno
+spec:
+  ttlSecondsAfterFinished: 3600
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: etl
+          image: diageno-etl:latest
+          imagePullPolicy: IfNotPresent
+          command: ["python", "-m", "diageno.etl.load_gold"]
+          envFrom:
+            - configMapRef:
+                name: diageno-env
+          volumeMounts:
+            - name: data
+              mountPath: /data
+          resources:
+            requests:
+              memory: "1Gi"
+              cpu: "500m"
+            limits:
+              memory: "4Gi"
+              cpu: "2000m"
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: data-pvc
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: train-model
+  namespace: diageno
+spec:
+  ttlSecondsAfterFinished: 3600
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: etl
+          image: diageno-etl:latest
+          imagePullPolicy: IfNotPresent
+          command: ["python", "-m", "diageno.training.train_all"]
+          envFrom:
+            - configMapRef:
+                name: diageno-env
+          volumeMounts:
+            - name: data
+              mountPath: /data
+          resources:
+            requests:
+              memory: "2Gi"
+              cpu: "1000m"
+            limits:
+              memory: "4Gi"
+              cpu: "2000m"
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: data-pvc

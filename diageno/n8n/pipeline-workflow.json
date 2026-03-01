@@ -1,0 +1,137 @@
+{
+  "name": "Diageno ETL Pipeline",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "run-pipeline",
+        "responseMode": "lastNode"
+      },
+      "id": "webhook-trigger",
+      "name": "Webhook Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "command": "kubectl -n diageno delete job download-bronze --ignore-not-found && kubectl -n diageno apply -f /k8s/etl-jobs.yaml -l job=download-bronze"
+      },
+      "id": "download-bronze",
+      "name": "Download Bronze",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [500, 300]
+    },
+    {
+      "parameters": {
+        "command": "kubectl -n diageno wait --for=condition=complete job/download-bronze --timeout=600s"
+      },
+      "id": "wait-bronze",
+      "name": "Wait Bronze",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [700, 300]
+    },
+    {
+      "parameters": {
+        "command": "kubectl -n diageno delete job parse-silver --ignore-not-found && kubectl -n diageno apply -f /k8s/etl-jobs.yaml -l job=parse-silver"
+      },
+      "id": "parse-silver",
+      "name": "Parse Silver",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [900, 300]
+    },
+    {
+      "parameters": {
+        "command": "kubectl -n diageno wait --for=condition=complete job/parse-silver --timeout=600s"
+      },
+      "id": "wait-silver",
+      "name": "Wait Silver",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [1100, 300]
+    },
+    {
+      "parameters": {
+        "command": "kubectl -n diageno delete job load-gold --ignore-not-found && kubectl -n diageno apply -f /k8s/etl-jobs.yaml -l job=load-gold"
+      },
+      "id": "load-gold",
+      "name": "Load Gold",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [1300, 300]
+    },
+    {
+      "parameters": {
+        "command": "kubectl -n diageno wait --for=condition=complete job/load-gold --timeout=300s"
+      },
+      "id": "wait-gold",
+      "name": "Wait Gold",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [1500, 300]
+    },
+    {
+      "parameters": {
+        "command": "kubectl -n diageno delete job train-model --ignore-not-found && kubectl -n diageno apply -f /k8s/etl-jobs.yaml -l job=train-model"
+      },
+      "id": "train-model",
+      "name": "Train Model",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [1700, 300]
+    },
+    {
+      "parameters": {
+        "command": "kubectl -n diageno wait --for=condition=complete job/train-model --timeout=600s"
+      },
+      "id": "wait-train",
+      "name": "Wait Train",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [1900, 300]
+    },
+    {
+      "parameters": {
+        "url": "http://api:8000/health",
+        "method": "GET"
+      },
+      "id": "smoke-test",
+      "name": "API Smoke Test",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [2100, 300]
+    }
+  ],
+  "connections": {
+    "Webhook Trigger": {
+      "main": [[{ "node": "Download Bronze", "type": "main", "index": 0 }]]
+    },
+    "Download Bronze": {
+      "main": [[{ "node": "Wait Bronze", "type": "main", "index": 0 }]]
+    },
+    "Wait Bronze": {
+      "main": [[{ "node": "Parse Silver", "type": "main", "index": 0 }]]
+    },
+    "Parse Silver": {
+      "main": [[{ "node": "Wait Silver", "type": "main", "index": 0 }]]
+    },
+    "Wait Silver": {
+      "main": [[{ "node": "Load Gold", "type": "main", "index": 0 }]]
+    },
+    "Load Gold": {
+      "main": [[{ "node": "Wait Gold", "type": "main", "index": 0 }]]
+    },
+    "Wait Gold": {
+      "main": [[{ "node": "Train Model", "type": "main", "index": 0 }]]
+    },
+    "Train Model": {
+      "main": [[{ "node": "Wait Train", "type": "main", "index": 0 }]]
+    },
+    "Wait Train": {
+      "main": [[{ "node": "API Smoke Test", "type": "main", "index": 0 }]]
+    }
+  }
+}
