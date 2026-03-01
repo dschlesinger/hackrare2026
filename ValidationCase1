@@ -55,16 +55,19 @@
                 {
                     "rank": 1,
                     "action": "diagnostic mammography and core needle biopsy",
+                    "category": "sample_collection",
                     "mrr_weight": 1.0
                 },
                 {
                     "rank": 2,
                     "action": "test ER/PR/HER2 IHC + HER2 FISH",
+                    "category": "genetic testing",
                     "mrr_weight": 0.5
                 },
                 {
                     "rank": 3,
                     "action": "test Germline BRCA1/BRCA2 sequencing",
+                    "category": "genetic testing",
                     "mrr_weight": 0.333
                 }
             ]
