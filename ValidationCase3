@@ -44,14 +44,9 @@
     },
     {
       "hpo_id": "HP:0002664",
-      "label": "Tumor necrosis",
+      "label": "Neoplasm",
       "status": "present"
     },
-    {
-      "hpo_id": "HP:0030677",
-      "label": "Tumor hemorrhage",
-      "status": "present"
-    }
   ],
   "imaging_and_tests": [
     {
