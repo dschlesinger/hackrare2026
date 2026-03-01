@@ -102,13 +102,13 @@
       "doctor_next_steps_ranked": [
         {
           "rank": 1,
-          "action": "Breast ultrasound imaging",
+          "action": "Breast ultrasound imaging and MRI",
           "category": "imaging",
           "mrr_weight": 1.0
         },
         {
           "rank": 2,
-          "action": "Breast MRI for local extent assessment",
+          "action": "IHC panel",
           "category": "imaging",
           "mrr_weight": 0.5
         },
@@ -116,83 +116,6 @@
           "rank": 3,
           "action": "Ultrasound-guided core needle biopsy",
           "category": "procedure",
-          "mrr_weight": 0.3333333333
-        }
-      ]
-    },
-    {
-      "stage_id": "B_pathologic_confirmation",
-      "input_available_to_system": [
-        "Suspicious malignant tumor on biopsy",
-        "IHC markers positive (SS18-SSX, TLE1, CK, EMA, etc.)"
-      ],
-      "doctor_next_steps_ranked": [
-        {
-          "rank": 1,
-          "action": "Confirm diagnosis with FISH for SS18 gene translocation",
-          "category": "molecular_test",
-          "mrr_weight": 1.0
-        },
-        {
-          "rank": 2,
-          "action": "Surgical planning for radical resection",
-          "category": "treatment_plan",
-          "mrr_weight": 0.5
-        }
-      ]
-    },
-    {
-      "stage_id": "C_surgical_management",
-      "input_available_to_system": [
-        "Confirmed synovial sarcoma",
-        "Large tumor invading ribs",
-        "No nodal metastasis"
-      ],
-      "doctor_next_steps_ranked": [
-        {
-          "rank": 1,
-          "action": "Extended radical mastectomy with rib resection and negative margin confirmation",
-          "category": "surgery",
-          "mrr_weight": 1.0
-        },
-        {
-          "rank": 2,
-          "action": "Chest wall reconstruction using TRAM flap",
-          "category": "reconstruction",
-          "mrr_weight": 0.5
-        },
-        {
-          "rank": 3,
-          "action": "Postoperative radiotherapy due to large tumor size",
-          "category": "adjuvant_therapy",
-          "mrr_weight": 0.3333333333
-        }
-      ]
-    },
-    {
-      "stage_id": "D_postoperative_followup",
-      "input_available_to_system": [
-        "Large high-risk tumor",
-        "Negative surgical margins",
-        "High Ki-67 (70%)"
-      ],
-      "doctor_next_steps_ranked": [
-        {
-          "rank": 1,
-          "action": "Recommend postoperative radiotherapy to reduce recurrence risk",
-          "category": "adjuvant_therapy",
-          "mrr_weight": 1.0
-        },
-        {
-          "rank": 2,
-          "action": "Consider systemic therapy (chemotherapy or clinical trial) in high-risk scenario",
-          "category": "systemic_therapy",
-          "mrr_weight": 0.5
-        },
-        {
-          "rank": 3,
-          "action": "Long-term surveillance for recurrence/metastasis",
-          "category": "follow_up",
           "mrr_weight": 0.3333333333
         }
       ]

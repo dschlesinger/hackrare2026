@@ -1,8 +1,7 @@
 {
-  "schema_version": "0.1",
   "case_id": "omental_extrarenal_rhabdoid_tumor_adolescent_case",
   "patient": {
-    "age_years": 16,
+    "age": 16,
     "sex": "female",
     "duration_days_abdominal_pain": 10
   },
@@ -141,97 +140,12 @@
         },
         {
           "rank": 3,
-          "action": "Urgent surgical evaluation for suspected torsion/acute abdomen when pain worsens",
-          "category": "clinical_management",
-          "mrr_weight": 0.3333333333
-        }
-      ]
-    },
-    {
-      "stage_id": "B_intraoperative_findings_large_omental_mass_with_hemorrhage",
-      "input_available_to_system": [
-        "Large purplish-red omental mass with bleeding/necrosis",
-        "Normal uterus and ovaries",
-        "Hemoperitoneum"
-      ],
-      "doctor_next_steps_ranked": [
-        {
-          "rank": 1,
-          "action": "Intraoperative frozen section pathology to assess malignancy",
-          "category": "pathology",
-          "mrr_weight": 1.0
-        },
-        {
-          "rank": 2,
-          "action": "Surgical debulking/omentectomy and resection of involved lesions",
-          "category": "surgery",
-          "mrr_weight": 0.5
-        },
-        {
-          "rank": 3,
-          "action": "Send tissue for definitive histology + immunohistochemistry panel",
-          "category": "pathology",
-          "mrr_weight": 0.3333333333
-        }
-      ]
-    },
-    {
-      "stage_id": "C_pathologic_workup_for_rhabdoid_tumor",
-      "input_available_to_system": [
-        "Rhabdoid morphology with necrosis",
-        "Broad IHC panel results",
-        "INI1 negative"
-      ],
-      "doctor_next_steps_ranked": [
-        {
-          "rank": 1,
-          "action": "Use INI1/SMARCB1 loss (IHC) as key diagnostic discriminator for rhabdoid tumor",
-          "category": "molecular_pathology",
-          "mrr_weight": 1.0
-        },
-        {
-          "rank": 2,
-          "action": "Exclude alternative tumors via IHC (e.g., desmin, S100, WT1, TLE1)",
-          "category": "differential_diagnosis",
-          "mrr_weight": 0.5
-        },
-        {
-          "rank": 3,
-          "action": "Staging workup (PET-CT) to evaluate primary vs metastatic disease",
-          "category": "staging",
-          "mrr_weight": 0.3333333333
-        }
-      ]
-    },
-    {
-      "stage_id": "D_postoperative_management_and_prognosis",
-      "input_available_to_system": [
-        "Confirmed extrarenal rhabdoid tumor",
-        "Aggressive course; rapid decline",
-        "No primary identified on PET-CT"
-      ],
-      "doctor_next_steps_ranked": [
-        {
-          "rank": 1,
-          "action": "Oncology referral for consideration of intensive chemotherapy/radiotherapy protocols (where feasible)",
-          "category": "referral",
-          "mrr_weight": 1.0
-        },
-        {
-          "rank": 2,
-          "action": "Supportive care for hemorrhage, infection, and complications",
-          "category": "supportive_care",
-          "mrr_weight": 0.5
-        },
-        {
-          "rank": 3,
-          "action": "Close surveillance/rapid reassessment given high mortality risk",
-          "category": "follow_up",
+          "action": "INI1 (SMARCB1) immunohistochemistry",
+          "category": "lab_workup",
           "mrr_weight": 0.3333333333
         }
       ]
     }
-  ],
   "outcome": {
     "postop_course": "Rehospitalized ~2 weeks after discharge for persistent blood loss and infection; received symptomatic support",
     "death": "Died ~1 month after operation"
