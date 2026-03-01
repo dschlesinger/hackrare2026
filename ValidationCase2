@@ -1,7 +1,7 @@
 {
   "case_id": "caid_cipo_pediatric_case",
   "patient": {
-    "age_years": 10,
+    "age": 10,
     "sex": "male",
     "consanguinity": "Fourth-degree parental consanguinity",
     "medical_history": [
@@ -141,7 +141,7 @@
         {
           "rank": 3,
           "action": "Targeted SGOL1 sequencing",
-          "category": "genetic test",
+          "category": "genetic_testing",
           "mrr_weight": 0.3333333333
         }
       ]
