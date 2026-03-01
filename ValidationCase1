@@ -54,62 +54,17 @@
             "recommended_next_steps_ranked": [
                 {
                     "rank": 1,
-                    "action": "diagnostic mammography (bilateral)",
+                    "action": "diagnostic mammography and core needle biopsy",
                     "mrr_weight": 1.0
                 },
                 {
                     "rank": 2,
-                    "action": "targeted breast ultrasound",
+                    "action": "test ER/PR/HER2 IHC + HER2 FISH",
                     "mrr_weight": 0.5
                 },
                 {
                     "rank": 3,
-                    "action": "US-guided core needle biopsy",
-                    "mrr_weight": 0.333
-                }
-            ]
-        },
-        {
-            "stage": "B_post_biopsy",
-            "recommended_next_steps_ranked": [
-                {
-                    "rank": 1,
-                    "action": "multidisciplinary breast oncology referral",
-                    "mrr_weight": 1.0
-                },
-                {
-                    "rank": 2,
-                    "action": "surgery planning + sentinel node biopsy",
-                    "mrr_weight": 0.5
-                },
-                {
-                    "rank": 3,
-                    "action": "genetic counseling/testing (BRCA-focused)",
-                    "mrr_weight": 0.333
-                },
-                {
-                    "rank": 4,
-                    "action": "21-gene recurrence score assay to guide chemo",
-                    "mrr_weight": 0.25
-                }
-            ]
-        },
-        {
-            "stage": "C_covid_constraints",
-            "recommended_next_steps_ranked": [
-                {
-                    "rank": 1,
-                    "action": "neoadjuvant aromatase inhibitor therapy",
-                    "mrr_weight": 1.0
-                },
-                {
-                    "rank": 2,
-                    "action": "use genomic score to decide chemo vs endocrine",
-                    "mrr_weight": 0.5
-                },
-                {
-                    "rank": 3,
-                    "action": "monitor response with follow-up ± imaging",
+                    "action": "test Germline BRCA1/BRCA2 sequencing",
                     "mrr_weight": 0.333
                 }
             ]
